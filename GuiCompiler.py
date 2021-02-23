@@ -20,10 +20,28 @@ class GuiCompiler(tk.Frame):
         buttonframe.pack(side="top", fill="x", expand=False)
         container.pack(side="top", fill="both", expand=True)
 
-        page_frame = []
+        self.page_frame = []
+
         for idx, page in enumerate(pages):
-            page_frame[idx] = page
-            page_frame[idx].place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+            self.page_frame.append(0)
+            self.page_frame[idx] = page
+            self.page_frame[idx].place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+
+        # todo
+        self.curr = 0
+        self.page_lifter(self.curr)
+
+        b_prev = tk.Button(buttonframe, text="PREV", command=lambda: self.page_lifter(-1))
+        b_next = tk.Button(buttonframe, text="NEXT", command=self.page_frame[self.curr+1].show())
+
+        b_prev.pack(side="left")
+        b_next.pack(side="right")
+
+    #     self.update_vars()
+    #
+    # def update_vars(self):
+    #     self.after(1000, self.update_vars())
+    #     self.update()
 
 
 
@@ -61,19 +79,32 @@ class GuiCompiler(tk.Frame):
         pages = []
         for frame in frames:
             pages.append(PageCreator(frame))
-        return  pages
+        return pages
 
-class PageCreator:
-    def __init__(self, frame_att, *args, **kwargs):
-        Page.__init__(self, *args, **kwargs)
-        label = tk.Label(self, text=frame_att[0])
-        label.pack(side="top", fill="both", expand=True)
+    def page_lifter(self, delta):
+        # Todo Create button lifter
+        if 0 < self.curr < len(self.page_frame) - 1:
+            self.curr += delta
+
+
+
 
 class Page(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
     def show(self):
         self.lift()
+
+class PageCreator(Page):
+    def __init__(self, frame_att, *args, **kwargs):
+        Page.__init__(self, *args, **kwargs)
+        label = tk.Label(self, text=frame_att[0])
+        label.pack(side="top", fill="both", expand=True)
+
+    def show(self):
+        self.lift()
+
+
 
 if __name__ == "__main__":
     ini_file = "FakeTest.ini"
