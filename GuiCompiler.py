@@ -29,14 +29,15 @@ class GuiCompiler(tk.Frame):
 
         # todo
         self.curr = 0
-        self.page_lifter(self.curr)
 
-        b_prev = tk.Button(buttonframe, text="PREV", command=lambda: self.page_lifter(-1))
-        b_next = tk.Button(buttonframe, text="NEXT", command=self.page_frame[self.curr+1].show())
+        b_prev = tk.Button(buttonframe, text="PREV", command=lambda: self.page_frame[self.page_lifter(-1)].show())
+        b_next = tk.Button(buttonframe, text="NEXT", command=lambda: self.page_frame[self.page_lifter(1)].show())
 
         b_prev.pack(side="left")
         b_next.pack(side="right")
 
+        # Start at the first
+        self.page_frame[self.page_lifter(self.curr)].show()
     #     self.update_vars()
     #
     # def update_vars(self):
@@ -83,8 +84,10 @@ class GuiCompiler(tk.Frame):
 
     def page_lifter(self, delta):
         # Todo Create button lifter
-        if 0 < self.curr < len(self.page_frame) - 1:
+        if 0 <= self.curr + delta < len(self.page_frame):
             self.curr += delta
+        print(self.curr)
+        return self.curr
 
 
 
@@ -102,7 +105,8 @@ class PageCreator(Page):
         label.pack(side="top", fill="both", expand=True)
 
     def show(self):
-        self.lift()
+        print("Pagecreator")
+        self.tkraise()
 
 
 
